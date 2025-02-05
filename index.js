@@ -14,7 +14,7 @@ const server = http.createServer((req, res) => {
                 res.end(JSON.stringify({error: 'Failed to load graph.json'}));
                 return;
             }
-            res.writeHead(200, {'Content-Type': 'application/json'});
+            res.writeHead(200, {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'});
             res.end(data);
         });
     } else {
