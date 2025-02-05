@@ -2,13 +2,7 @@
   "name": "frontendchallengeserver",
   "version": "1.0.0",
   "main": "index.js",
-  "scripts": {
-    "mocks" : "mocks-server"
-  },
   "author": "",
   "license": "ISC",
-  "description": "",
-  "devDependencies": {
-    "@mocks-server/main": "^4.1.0"
-  }
+  "description": ""
 }
