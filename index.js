@@ -1,30 +1,28 @@
-const http = require('http');
+const express = require('express');
+const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
 
-// Create a server
-const server = http.createServer((req, res) => {
-    if (req.url.match(/\/api\/v1\/[^/]+\/actions\/blueprints\/[^/]+\/graph/)  && req.method === 'GET') {
-        const filePath = path.join(__dirname, 'graph.json');
+const app = express();
+app.use(cors());
 
-        // Read the graph.json file
-        fs.readFile(filePath, 'utf8', (err, data) => {
-            if (err) {
-                res.writeHead(500, {'Content-Type': 'application/json'});
-                res.end(JSON.stringify({error: 'Failed to load graph.json'}));
-                return;
-            }
-            res.writeHead(200, {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'});
-            res.end(data);
-        });
+app.get('/action-blueprint-graph-get', (req, res) => {
+  const graphPath = path.join(__dirname, 'graph.json');
+  fs.readFile(graphPath, 'utf8', (err, data) => {
+    if (err) {
+      res.status(500).json({ error: 'Failed to load graph.json' });
     } else {
-        // Handle 404 for other routes
-        res.writeHead(404, {'Content-Type': 'application/json'});
-        res.end(JSON.stringify({error: 'Resource not found!'}));
+      try {
+        const json = JSON.parse(data);
+        res.json(json);
+      } catch (e) {
+        res.status(500).json({ error: 'Invalid JSON format in graph.json' });
+      }
     }
+  });
 });
 
-// Start the server on port 3000
-server.listen(3000, () => {
-    console.log('Server is running on http://localhost:3000');
+const port = 3001;
+app.listen(port, () => {
+  console.log(`✅ Mock Server running at http://localhost:${port}`);
 });
